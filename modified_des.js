@@ -1,32 +1,4 @@
-const ALPHA = [
-  " ",
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-  "N",
-  "O",
-  "P",
-  "Q",
-  "R",
-  "S",
-  "T",
-  "U",
-  "V",
-  "W",
-  "X",
-  "Y",
-  "Z",
-];
+const ALPHA = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const getSetupKeys = ({ text, block, iterations, key }) => {
   let series = [key.U_0];
   const partLen = Math.round(block / 2);
@@ -42,14 +14,14 @@ const getSetupKeys = ({ text, block, iterations, key }) => {
       (k + 1) * partLen * iterations
     );
   }
-  return { keys, divisions, msgLength, partLen };
+  return { keys, divisions, partLen };
 };
 
 const des = {
   _encrypt: (config) => {
     let cryptedNumbers = [];
     const { text, block, iterations } = config;
-    const { keys, divisions, msgLength, partLen } = getSetupKeys(config);
+    const { keys, divisions, partLen } = getSetupKeys(config);
     for (let i = 0; i < divisions; i++) {
       let msgIndexs = text
         .slice(i * block, i * block + block)
@@ -71,11 +43,8 @@ const des = {
         for (let k = 0; k < rightPart.length - 1; k++) {
           rightPart[k] = rightPart[k + 1];
         }
-        rightPart[rightPart.length - 1] = firstNumber;
-        const iterationKey = blockKey.slice(
-          j * rightPart.length,
-          (j + 1) * rightPart.length
-        );
+        rightPart[partLen - 1] = firstNumber;
+        const iterationKey = blockKey.slice(j * partLen, (j + 1) * partLen);
         rightPart = rightPart.map(
           (num, index) => (iterationKey[index] + num) % 27
         );
