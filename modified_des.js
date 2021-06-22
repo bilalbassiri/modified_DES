@@ -1,14 +1,16 @@
 const ALPHA = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const getSetupKeys = ({ text, block, iterations, key }) => {
-  let series = [key.U_0];
+  let series = [key.c];
   const partLen = Math.round(block / 2);
   const msgLength = text.length;
-  const divisions = Math.round(msgLength / block);
+  const divisions = Math.round(msgLength / block); // Number of blocks
   let keys = [];
   for (let i = 1; i < iterations * divisions * partLen; i++) {
+    // Generate the secondary keys
     series[i] = (key.a * series[i - 1] + key.b * (i - 1)) % 27;
   }
   for (let k = 0; k < divisions; k++) {
+    // Divide secondary keys into a collection for every block
     keys[k] = series.slice(
       k * partLen * iterations,
       (k + 1) * partLen * iterations
@@ -17,13 +19,15 @@ const getSetupKeys = ({ text, block, iterations, key }) => {
   return { keys, divisions, partLen };
 };
 
-const des = {
+const modified_des = {
+  // Encryption method
   _encrypt: (config) => {
     let cryptedNumbers = [];
     const { text, block, iterations } = config;
     const { keys, divisions, partLen } = getSetupKeys(config);
     for (let i = 0; i < divisions; i++) {
       let msgIndexs = text
+        .concat("       ")
         .slice(i * block, i * block + block)
         .split("")
         .map((letter) => ALPHA.indexOf(letter));
@@ -53,6 +57,7 @@ const des = {
     }
     return cryptedNumbers.map((num) => ALPHA[num]).join("");
   },
+  // Decryption method
   _decrypt: (config) => {
     const { text, block, iterations } = config;
     let result = [];
@@ -90,4 +95,4 @@ const des = {
   },
 };
 
-module.exports = des;
+module.exports = modified_des;
