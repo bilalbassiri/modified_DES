@@ -4,8 +4,7 @@ const modified_des = require("./modified_des");
 
 const TEXT = "WE HAVE ART IN ORDER NOT TO DIE FROM THE TRUTH",
   secret = {
-    key: { a: 17, b: 13, c: 34 },
-    block: 8,
+    key: { a: 29, b: 17, c: 8 },
     iterations: 16,
   };
 
@@ -21,7 +20,7 @@ const PLAIN_TEXT = modified_des._decrypt({
   ...secret,
 });
 
-console.log(CIPHER_TEXT); // Output: JANDPSTXDCWLM DAJEXSTPHVHJWQM NRCXLSY FLMODPGDNW
+console.log(CIPHER_TEXT); // Output: SMWYFCJQFZYQWVNEELSHWVKJWAKQIQJQKZTCNAVVNAEKPPWQ
 console.log(PLAIN_TEXT); // Output: WE HAVE ART IN ORDER NOT TO DIE FROM THE TRUTH
 
 // https://github.com/bilalbassiri
